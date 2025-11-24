@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Blog Posts</h1>
+
+    {% if current_user.is_authenticated %}
+    <div class="mb-3">
+        <a href="{{ url_for('posts.create_post') }}" class="btn btn-primary">Write a Post</a>
+    </div>
+    {% endif %}
+
+    {% if posts %}
+    {% for post in posts %}
+    <div class="card">
+        <h2 class="card-title">
+            <a href="{{ url_for('posts.view_post', post_id=post.id) }}" style="text-decoration: none; color: inherit;">
+                {{ post.title }}
+            </a>
+        </h2>
+        <p class="card-text">{{ post.get_preview() }}</p>
+        <p class="card-meta">
+            By <a href="{{ url_for('profile.view_profile', username=post.author.username) }}">
+                {{ post.author.username }}
+            </a> • {{ post.created_at.strftime('%B %d, %Y') }}
+        </p>
+        <a href="{{ url_for('posts.view_post', post_id=post.id) }}" class="btn btn-sm btn-primary">Read More</a>
+    </div>
+    {% endfor %}
+    {% else %}
+    <p class="text-center">No posts yet. {% if current_user.is_authenticated %}Be the first to write one!{% endif %}</p>
+    {% endif %}
+</div>
+{% endblock %}

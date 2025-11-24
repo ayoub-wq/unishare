@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="container-small">
+    <h1 class="text-center mb-4">{{ title }}</h1>
+
+    <div class="card">
+        <form method="POST" action="">
+            {{ form.hidden_tag() }}
+
+            <div class="form-group">
+                {{ form.title.label(class="form-label") }}
+                {{ form.title(class="form-control" + (" is-invalid" if form.title.errors else "")) }}
+                {% if form.title.errors %}
+                {% for error in form.title.errors %}
+                <div class="form-error">{{ error }}</div>
+                {% endfor %}
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                {{ form.content.label(class="form-label") }}
+                {{ form.content(class="form-control" + (" is-invalid" if form.content.errors else "")) }}
+                {% if form.content.errors %}
+                {% for error in form.content.errors %}
+                <div class="form-error">{{ error }}</div>
+                {% endfor %}
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                {{ form.submit(class="btn btn-primary", style="width: 100%;") }}
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

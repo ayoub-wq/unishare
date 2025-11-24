@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero">
+    <h1>Welcome to UniShare</h1>
+    <p>Connect with tutors, share knowledge, and access course resources - all in one place</p>
+    {% if not current_user.is_authenticated %}
+    <div class="hero-actions">
+        <a href="{{ url_for('auth.register') }}" class="btn btn-primary">Get Started</a>
+        <a href="{{ url_for('auth.login') }}" class="btn btn-outline">Login</a>
+    </div>
+    {% endif %}
+</section>
+
+<!-- Features -->
+<section class="features">
+    <div class="features-grid">
+        <div class="feature">
+            <div class="feature-icon">📚</div>
+            <h3>Find Tutors</h3>
+            <p>Browse tutoring gigs posted by students and find help in any subject</p>
+        </div>
+        <div class="feature">
+            <div class="feature-icon">✍️</div>
+            <h3>Share Knowledge</h3>
+            <p>Write blog posts, share experiences, and learn from your peers</p>
+        </div>
+        <div class="feature">
+            <div class="feature-icon">🎓</div>
+            <h3>Access Courses</h3>
+            <p>Find all your course resources in one centralized location</p>
+        </div>
+    </div>
+</section>
+
+<!-- Quick Links -->
+<div class="container">
+    <h2 class="text-center mb-4">Explore</h2>
+    <div class="grid">
+        <div class="card">
+            <h3 class="card-title">Tutoring Gigs</h3>
+            <p class="card-text">Find students offering tutoring services in various subjects and majors.</p>
+            <a href="{{ url_for('gigs.list_gigs') }}" class="btn btn-primary">Browse Gigs</a>
+        </div>
+        <div class="card">
+            <h3 class="card-title">Blog Posts</h3>
+            <p class="card-text">Read articles and tips shared by students and teachers.</p>
+            <a href="{{ url_for('posts.list_posts') }}" class="btn btn-primary">Read Posts</a>
+        </div>
+        <div class="card">
+            <h3 class="card-title">Course Resources</h3>
+            <p class="card-text">Access course materials and links provided by teachers.</p>
+            <a href="{{ url_for('courses.list_courses') }}" class="btn btn-primary">View Courses</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

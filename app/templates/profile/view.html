@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="profile-header">
+        <div>
+            {% if user.profile_picture %}
+            <img src="{{ url_for('static', filename='uploads/' + user.profile_picture) }}" alt="{{ user.username }}"
+                class="profile-picture">
+            {% else %}
+            <div class="profile-picture"
+                style="background-color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 3rem; color: white;">
+                {{ user.username[0].upper() }}
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="profile-info">
+            <h1>{{ user.username }}</h1>
+            <p><strong>Role:</strong> {{ user.role.capitalize() }}</p>
+            {% if user.major %}
+            <p><strong>Major:</strong> {{ user.major }}</p>
+            {% endif %}
+            {% if user.bio %}
+            <p class="profile-bio">{{ user.bio }}</p>
+            {% endif %}
+
+            {% if current_user.is_authenticated and current_user.id == user.id %}
+            <div class="mt-2">
+                <a href="{{ url_for('profile.edit_profile') }}" class="btn btn-primary">Edit Profile</a>
+                <a href="{{ url_for('profile.change_password') }}" class="btn btn-secondary">Change Password</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- User's Gigs -->
+    {% if gigs %}
+    <h2>Tutoring Gigs</h2>
+    <div class="grid">
+        {% for gig in gigs %}
+        <div class="card">
+            <h3 class="card-title">{{ gig.subject }}</h3>
+            <p class="card-text"><strong>Major:</strong> {{ gig.major }}</p>
+            <p class="card-text"><strong>Available:</strong> {{ gig.available_hours }}</p>
+            <p class="card-meta">{{ gig.created_at.strftime('%B %d, %Y') }}</p>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- User's Posts -->
+    {% if posts %}
+    <h2 class="mt-4">Blog Posts</h2>
+    {% for post in posts %}
+    <div class="card">
+        <h3 class="card-title">
+            <a href="{{ url_for('posts.view_post', post_id=post.id) }}" style="text-decoration: none; color: inherit;">
+                {{ post.title }}
+            </a>
+        </h3>
+        <p class="card-text">{{ post.get_preview() }}</p>
+        <p class="card-meta">{{ post.created_at.strftime('%B %d, %Y') }}</p>
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    <!-- User's Courses (for teachers) -->
+    {% if courses %}
+    <h2 class="mt-4">Courses</h2>
+    <div class="grid">
+        {% for course in courses %}
+        <div class="card">
+            <h3 class="card-title">{{ course.title }}</h3>
+            {% if course.description %}
+            <p class="card-text">{{ course.description }}</p>
+            {% endif %}
+            <a href="{{ course.link }}" target="_blank" class="btn btn-sm btn-primary">Access Course</a>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if not gigs and not posts and not courses %}
+    <p class="text-center">No content yet.</p>
+    {% endif %}
+</div>
+{% endblock %}

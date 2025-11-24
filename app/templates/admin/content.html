@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Manage Content</h1>
+
+    <!-- Gigs -->
+    <h2 class="mt-4">Gigs ({{ gigs|length }})</h2>
+    {% if gigs %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Subject</th>
+                <th>Major</th>
+                <th>Posted By</th>
+                <th>Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for gig in gigs %}
+            <tr>
+                <td>{{ gig.subject }}</td>
+                <td>{{ gig.major }}</td>
+                <td>{{ gig.user.username }}</td>
+                <td>{{ gig.created_at.strftime('%Y-%m-%d') }}</td>
+                <td>
+                    <form method="POST" action="{{ url_for('gigs.delete_gig', gig_id=gig.id) }}"
+                        style="display: inline;">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>No gigs yet.</p>
+    {% endif %}
+
+    <!-- Posts -->
+    <h2 class="mt-4">Posts ({{ posts|length }})</h2>
+    {% if posts %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for post in posts %}
+            <tr>
+                <td>
+                    <a href="{{ url_for('posts.view_post', post_id=post.id) }}">
+                        {{ post.title }}
+                    </a>
+                </td>
+                <td>{{ post.author.username }}</td>
+                <td>{{ post.created_at.strftime('%Y-%m-%d') }}</td>
+                <td>
+                    <form method="POST" action="{{ url_for('posts.delete_post', post_id=post.id) }}"
+                        style="display: inline;">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>No posts yet.</p>
+    {% endif %}
+
+    <!-- Courses -->
+    <h2 class="mt-4">Courses ({{ courses|length }})</h2>
+    {% if courses %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Teacher</th>
+                <th>Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for course in courses %}
+            <tr>
+                <td>{{ course.title }}</td>
+                <td>{{ course.teacher.username }}</td>
+                <td>{{ course.created_at.strftime('%Y-%m-%d') }}</td>
+                <td>
+                    <form method="POST" action="{{ url_for('courses.delete_course', course_id=course.id) }}"
+                        style="display: inline;">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>No courses yet.</p>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="container-small">
+    <h1 class="text-center mb-4">{{ title }}</h1>
+
+    <div class="card">
+        <form method="POST" action="" enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+
+            <div class="form-group">
+                {{ form.username.label(class="form-label") }}
+                {{ form.username(class="form-control" + (" is-invalid" if form.username.errors else "")) }}
+                {% if form.username.errors %}
+                {% for error in form.username.errors %}
+                <div class="form-error">{{ error }}</div>
+                {% endfor %}
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                {{ form.email.label(class="form-label") }}
+                {{ form.email(class="form-control" + (" is-invalid" if form.email.errors else "")) }}
+                {% if form.email.errors %}
+                {% for error in form.email.errors %}
+                <div class="form-error">{{ error }}</div>
+                {% endfor %}
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                {{ form.bio.label(class="form-label") }}
+                {{ form.bio(class="form-control" + (" is-invalid" if form.bio.errors else "")) }}
+                {% if form.bio.errors %}
+                {% for error in form.bio.errors %}
+                <div class="form-error">{{ error }}</div>
+                {% endfor %}
+                {% endif %}
+            </div>
+
+            {% if current_user.is_student() %}
+            <div class="form-group">
+                {{ form.major.label(class="form-label") }}
+                {{ form.major(class="form-control" + (" is-invalid" if form.major.errors else "")) }}
+                {% if form.major.errors %}
+                {% for error in form.major.errors %}
+                <div class="form-error">{{ error }}</div>
+                {% endfor %}
+                {% endif %}
+            </div>
+            {% endif %}
+
+            <div class="form-group">
+                {{ form.profile_picture.label(class="form-label") }}
+                {{ form.profile_picture(class="form-control", onchange="previewImage(this)") }}
+                {% if form.profile_picture.errors %}
+                {% for error in form.profile_picture.errors %}
+                <div class="form-error">{{ error }}</div>
+                {% endfor %}
+                {% endif %}
+                {% if current_user.profile_picture %}
+                <div class="mt-2">
+                    <p>Current picture:</p>
+                    <img src="{{ url_for('static', filename='uploads/' + current_user.profile_picture) }}" alt="Current"
+                        style="max-width: 150px; border-radius: 8px;">
+                </div>
+                {% endif %}
+                <img id="image-preview" style="display: none; max-width: 150px; margin-top: 10px; border-radius: 8px;">
+            </div>
+
+            <div class="form-group">
+                {{ form.submit(class="btn btn-primary", style="width: 100%;") }}
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="search-filter">
+        <h1>Tutoring Gigs</h1>
+        <form method="GET" action="{{ url_for('gigs.list_gigs') }}" class="search-form">
+            <input type="text" name="search" class="form-control search-input"
+                placeholder="Search by subject or major..." value="{{ search_query }}">
+
+            <select name="major" class="form-control">
+                <option value="">All Majors</option>
+                {% for major in majors %}
+                <option value="{{ major }}" {% if filter_major==major %}selected{% endif %}>
+                    {{ major }}
+                </option>
+                {% endfor %}
+            </select>
+
+            <button type="submit" class="btn btn-primary">Search</button>
+            <a href="{{ url_for('gigs.list_gigs') }}" class="btn btn-secondary">Clear</a>
+        </form>
+    </div>
+
+    {% if current_user.is_authenticated and current_user.is_student() %}
+    <div class="mb-3">
+        <a href="{{ url_for('gigs.create_gig') }}" class="btn btn-primary">Post Your Gig</a>
+    </div>
+    {% endif %}
+
+    {% if gigs %}
+    <div class="grid">
+        {% for gig in gigs %}
+        <div class="card">
+            <h3 class="card-title">{{ gig.subject }}</h3>
+            <p class="card-text"><strong>Major:</strong> {{ gig.major }}</p>
+            <p class="card-text"><strong>Available:</strong> {{ gig.available_hours }}</p>
+            <p class="card-meta">
+                Posted by <a href="{{ url_for('profile.view_profile', username=gig.user.username) }}">
+                    {{ gig.user.username }}
+                </a> • {{ gig.created_at.strftime('%B %d, %Y') }}
+            </p>
+
+            {% if current_user.is_authenticated and (current_user.id == gig.user_id or current_user.is_admin()) %}
+            <div class="card-actions">
+                <a href="{{ url_for('gigs.edit_gig', gig_id=gig.id) }}" class="btn btn-sm btn-secondary">Edit</a>
+                <form method="POST" action="{{ url_for('gigs.delete_gig', gig_id=gig.id) }}" style="display: inline;">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                </form>
+            </div>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p class="text-center">No gigs found. {% if current_user.is_authenticated and current_user.is_student() %}Be the
+        first to post one!{% endif %}</p>
+    {% endif %}
+</div>
+{% endblock %}

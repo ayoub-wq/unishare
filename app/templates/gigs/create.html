@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="container-small">
+    <h1 class="text-center mb-4">{{ title }}</h1>
+
+    <div class="card">
+        <form method="POST" action="">
+            {{ form.hidden_tag() }}
+
+            <div class="form-group">
+                {{ form.major.label(class="form-label") }}
+                {{ form.major(class="form-control" + (" is-invalid" if form.major.errors else "")) }}
+                {% if form.major.errors %}
+                {% for error in form.major.errors %}
+                <div class="form-error">{{ error }}</div>
+                {% endfor %}
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                {{ form.subject.label(class="form-label") }}
+                {{ form.subject(class="form-control" + (" is-invalid" if form.subject.errors else "")) }}
+                {% if form.subject.errors %}
+                {% for error in form.subject.errors %}
+                <div class="form-error">{{ error }}</div>
+                {% endfor %}
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                {{ form.available_hours.label(class="form-label") }}
+                {{ form.available_hours(class="form-control" + (" is-invalid" if form.available_hours.errors else ""),
+                placeholder="e.g., Mon-Wed 2pm-5pm") }}
+                {% if form.available_hours.errors %}
+                {% for error in form.available_hours.errors %}
+                <div class="form-error">{{ error }}</div>
+                {% endfor %}
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                {{ form.submit(class="btn btn-primary", style="width: 100%;") }}
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
