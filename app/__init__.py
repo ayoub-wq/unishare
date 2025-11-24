@@ -40,7 +40,7 @@ def create_app(config_name=None):
         return User.query.get(int(user_id))
     
     # Register blueprints
-    from app.routes import auth, gigs, posts, courses, profile, admin
+    from app.routes import auth, gigs, posts, courses, profile, admin, setup
     
     app.register_blueprint(auth.bp)
     app.register_blueprint(gigs.bp)
@@ -48,6 +48,7 @@ def create_app(config_name=None):
     app.register_blueprint(courses.bp)
     app.register_blueprint(profile.bp)
     app.register_blueprint(admin.bp)
+    app.register_blueprint(setup.bp)
     
     # Home route
     @app.route('/')

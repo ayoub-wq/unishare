@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}Create Admin Account{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 500px; margin-top: 4rem;">
+    <div class="card">
+        <div class="card-body">
+            <h1 class="text-center mb-4">🔐 Setup Admin Account</h1>
+            <p class="text-center" style="color: var(--gray);">Create your first admin account</p>
+
+            <form method="POST">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" class="form-control" id="username" name="username" value="amadeus" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" class="form-control" id="email" name="email" value="amadeus@unishare.com"
+                        required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" class="form-control" id="password" name="password"
+                        placeholder="Enter secure password" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block">Create Admin Account</button>
+            </form>
+
+            <p class="text-center mt-3" style="font-size: 0.9rem; color: var(--gray);">
+                Note: This route only works when no admin exists.
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}
