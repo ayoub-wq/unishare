@@ -18,6 +18,11 @@ def create_app(config_name=None):
     if config_name is None:
         config_name = os.environ.get('FLASK_ENV', 'development')
     
+    # Validate config_name and provide fallback
+    if config_name not in config:
+        print(f"Warning: Invalid config '{config_name}', using 'production' as fallback")
+        config_name = 'production' if os.environ.get('DATABASE_URL') else 'development'
+    
     app = Flask(__name__)
     app.config.from_object(config[config_name])
     
