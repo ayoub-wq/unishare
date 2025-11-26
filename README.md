@@ -78,67 +78,26 @@ A Flask-based web application for university students to share tutoring availabi
 
 ## Deployment to Render
 
-### Prerequisites
+For detailed deployment instructions, see [DEPLOYMENT.md](DEPLOYMENT.md).
 
-- A GitHub account
-- A Render account (free tier available)
+### Quick Start
 
-### Steps
+1. **Create a PostgreSQL database on Render**
+2. **Create a Web Service** with:
+   - **Build Command**: `chmod +x build.sh && ./build.sh`
+   - **Start Command**: `gunicorn run:app`
+3. **Set Environment Variables**:
+   - `FLASK_ENV=production`
+   - `SECRET_KEY` (generate with: `python -c "import secrets; print(secrets.token_hex(32))"`)
+   - `DATABASE_URL` (from your PostgreSQL database)
+   - `ADMIN_USERNAME` (your admin username)
+   - `ADMIN_EMAIL` (your admin email)
+   - `ADMIN_PASSWORD` (your admin password)
+4. **Deploy** - the build script will automatically:
+   - Install dependencies
+   - Run database migrations
+   - Create your admin account
 
-1. **Push your code to GitHub**:
-   ```bash
-   git init
-   git add .
-   git commit -m "Initial commit"
-   git remote add origin <your-repo-url>
-   git push -u origin main
-   ```
-
-2. **Create a PostgreSQL database on Render**:
-   - Go to [Render Dashboard](https://dashboard.render.com/)
-   - Click "New +" → "PostgreSQL"
-   - Choose a name (e.g., `unishare-db`)
-   - Select the free tier
-   - Click "Create Database"
-   - Copy the "Internal Database URL"
-
-3. **Create a Web Service on Render**:
-   - Click "New +" → "Web Service"
-   - Connect your GitHub repository
-   - Configure the service:
-     - **Name**: `unishare`
-     - **Environment**: `Python 3`
-     - **Build Command**: `pip install -r requirements.txt && flask db upgrade`
-     - **Start Command**: `gunicorn run:app`
-     - **Instance Type**: Free
-
-4. **Set Environment Variables**:
-   In the Render dashboard, add the following environment variables:
-   - `SECRET_KEY`: Generate a secure random string
-   - `DATABASE_URL`: Paste the Internal Database URL from step 2
-   - `FLASK_ENV`: `production`
-
-5. **Deploy**:
-   - Click "Create Web Service"
-   - Render will automatically deploy your application
-   - Once deployed, visit your app URL
-
-6. **Create an admin account**:
-   - Use Render Shell to run:
-     ```bash
-     python create_admin.py
-     ```
-   - Or use Flask shell:
-     ```bash
-     flask shell
-     >>> from app import db
-     >>> from app.models import User
-     >>> admin = User(username='admin', email='admin@example.com', role='admin')
-     >>> admin.set_password('your-password')
-     >>> db.session.add(admin)
-     >>> db.session.commit()
-     >>> exit()
-     ```
 
 ## User Roles
 
